@@ -1,5 +1,4 @@
-﻿using CodeFlix.Catalog.Application.Exceptions;
-using CodeFlix.Catalog.Application.UseCases.Category.Common;
+﻿using CodeFlix.Catalog.Application.UseCases.Category.Common;
 using CodeFlix.Catalog.Domain.Repository;
 
 namespace CodeFlix.Catalog.Application.UseCases.Category.GetCategory
@@ -14,11 +13,6 @@ namespace CodeFlix.Catalog.Application.UseCases.Category.GetCategory
         public async Task<CategoryModelOutput> Handle(GetCategoryInput request, CancellationToken cancellationToken)
         {
             var category = await _categoryRepository.Get(request.Id, cancellationToken);
-
-            if (category == null)
-            {
-                throw new NotFoundException($"Category '{request.Id}' not Found");
-            }
 
             return CategoryModelOutput.FromCategory(category);
         }
