@@ -18,19 +18,19 @@ namespace CodeFlix.Catalog.UnitTest.Application.GetCategory
         [Trait("Application", "GetCategory - Use Cases")]
         public async Task GetCategory()
         {
-            var repositoyMock = _fixture.GetRepositoryMock();
+            var repositoryMock = _fixture.GetRepositoryMock();
             var exampleCategory = _fixture.GetValidCategory();
-            repositoyMock.Setup(x => 
+            repositoryMock.Setup(x => 
                 x.Get(
                     It.IsAny<Guid>(), 
                     It.IsAny<CancellationToken>()
                 )).ReturnsAsync(exampleCategory);
 
             var input = new UseCases.GetCategoryInput(exampleCategory.Id);
-            var useCase = new UseCases.GetCategory(repositoyMock.Object);
+            var useCase = new UseCases.GetCategory(repositoryMock.Object);
             var output = await useCase.Handle(input, CancellationToken.None);
 
-            repositoyMock.Verify(x => x.Get(
+            repositoryMock.Verify(x => x.Get(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken>()
             ), Times.Once);
@@ -47,10 +47,10 @@ namespace CodeFlix.Catalog.UnitTest.Application.GetCategory
         [Trait("Application", "GetCategory - Use Cases")]
         public async Task NotFoundExceptionWhenCategoryDoesntExist()
         {
-            var repositoyMock = _fixture.GetRepositoryMock();
+            var repositoryMock = _fixture.GetRepositoryMock();
             var exampleGuid = Guid.NewGuid();
 
-            repositoyMock.Setup(x =>
+            repositoryMock.Setup(x =>
                 x.Get(
                     It.IsAny<Guid>(),
                     It.IsAny<CancellationToken>()
@@ -59,20 +59,17 @@ namespace CodeFlix.Catalog.UnitTest.Application.GetCategory
                 );
 
             var input = new UseCases.GetCategoryInput(exampleGuid);
-            var useCase = new UseCases.GetCategory(repositoyMock.Object);
+            var useCase = new UseCases.GetCategory(repositoryMock.Object);
             var task = async () 
                 => await useCase.Handle(input, CancellationToken.None);
 
             await task.Should().ThrowAsync<NotFoundException>();
 
-            repositoyMock.Verify(x => x.Get(
+            repositoryMock.Verify(x => x.Get(
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken>()
             ), Times.Once);
 
         }
-
-
-
     }
 }
