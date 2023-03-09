@@ -55,7 +55,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.GetCategory
                     It.IsAny<Guid>(),
                     It.IsAny<CancellationToken>()
                 )).ThrowsAsync(
-                    new NotFoundException($"Category '{exampleGuid}' not Found")
+                    new NotFoundException($"Category '{exampleGuid}' not found")
                 );
 
             var input = new UseCases.GetCategoryInput(exampleGuid);
