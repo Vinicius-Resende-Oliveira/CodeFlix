@@ -1,6 +1,7 @@
 ﻿using CodeFlix.Catalog.Application.Exceptions;
 using CodeFlix.Catalog.Application.UseCases.Category.UpdateCategory;
 using CodeFlix.Catalog.Domain.Entity;
+using CodeFlix.Catalog.Domain.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -287,7 +288,40 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
                 It.IsAny<Guid>(),
                 It.IsAny<CancellationToken>()
             ), Times.Once);
+        }
 
+        [Theory(DisplayName = nameof(ThrowWhenCantUpdateAggregate))]
+        [Trait("Application", "CreateCategory - Use Cases")]
+        [MemberData(
+            nameof(UpdateCategoryTestDataGenerator.GetInvalidInputs),
+            parameters: 18,
+            MemberType = typeof(UpdateCategoryTestDataGenerator)
+        )]
+        public async void ThrowWhenCantUpdateAggregate(
+            UpdateCategoryInput input,
+            Category exampleCategory,
+            string exceptionMessage
+        )
+        {
+            var repositoryMock = _fixture.GetRepositoryMock();
+            var unitOfWorkMock = _fixture.GetUnitOfWork();
+
+            repositoryMock.Setup(x =>
+                x.Get(
+                    It.IsAny<Guid>(),
+                    It.IsAny<CancellationToken>()
+                )).ReturnsAsync(exampleCategory);
+
+            var useCase = new UseCases.UpdateCategory(
+                repositoryMock.Object,
+                unitOfWorkMock.Object
+            );
+
+            Func<Task> task = async () => await useCase.Handle(input, CancellationToken.None);
+
+            await task.Should()
+                .ThrowAsync<EntityValidationException>()
+                .WithMessage(exceptionMessage);
         }
     }
 }
