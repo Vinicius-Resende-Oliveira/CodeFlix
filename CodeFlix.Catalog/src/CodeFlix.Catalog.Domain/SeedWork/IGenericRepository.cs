@@ -1,6 +1,7 @@
 ﻿namespace CodeFlix.Catalog.Domain.SeedWork
 {
     public interface IGenericRepository<TAggregate> : IRepository
+        where TAggregate : AggregateRoot
     {
         Task Insert(TAggregate aggregate, CancellationToken cancellation);
         Task<TAggregate> Get(Guid id, CancellationToken cancellation);
