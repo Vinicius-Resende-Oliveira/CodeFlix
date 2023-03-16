@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace CodeFlix.Catalog.UnitTest.Application.DeleteCategory
+namespace CodeFlix.Catalog.UnitTest.Application.Category.DeleteCategory
 {
     public class DeleteCategoryInputValidatorTest
     {

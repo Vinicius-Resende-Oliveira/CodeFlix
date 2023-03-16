@@ -1,4 +1,4 @@
-﻿namespace CodeFlix.Catalog.UnitTest.Application.CreateCategory
+﻿namespace CodeFlix.Catalog.UnitTest.Application.Category.CreateCategory
 {
     public class CreateCategoryTestDataGenerator
     {

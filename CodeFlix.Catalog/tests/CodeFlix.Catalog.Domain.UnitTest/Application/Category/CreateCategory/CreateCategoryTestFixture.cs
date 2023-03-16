@@ -1,52 +1,22 @@
-﻿using CodeFlix.Catalog.Application.Contracts;
-using CodeFlix.Catalog.Application.UseCases.Category.CreateCategory;
-using CodeFlix.Catalog.Domain.Repository;
-using CodeFlix.Catalog.UnitTest.Commons;
-using Moq;
+﻿using CodeFlix.Catalog.Application.UseCases.Category.CreateCategory;
+using CodeFlix.Catalog.UnitTest.Application.Category.Common;
 using Xunit;
 
-namespace CodeFlix.Catalog.UnitTest.Application.CreateCategory
+namespace CodeFlix.Catalog.UnitTest.Application.Category.CreateCategory
 {
     [CollectionDefinition(nameof(CreateCategoryTestFixture))]
     public class CreateCategoryTestFixtureCollection : ICollectionFixture<CreateCategoryTestFixture>
     { }
 
 
-    public class CreateCategoryTestFixture : BaseFixture
+    public class CreateCategoryTestFixture
+        : CategoryUseCasesBaseFixture
     {
-        public string GetValidCategoryName()
-        {
-            var categoryName = "";
-            while (categoryName.Length < 3)
-            {
-                categoryName = Faker.Commerce.Categories(1)[0];
-            }
-
-            if (categoryName.Length > 255)
-            {
-                categoryName = categoryName[..255];
-            }
-            return categoryName;
-        }
-
-        public string GetValidCategoryDescription()
-        {
-            var categoryDescription = Faker.Commerce.ProductDescription();
-            if (categoryDescription.Length > 10_000)
-            {
-                categoryDescription = categoryDescription[..10_000];
-            }
-            return categoryDescription;
-        }
-
-        public bool getRandomBoolen()
-            => (new Random()).NextDouble() < 0.5;
-
         public CreateCategoryInput GetInput()
             => new(
                 GetValidCategoryName(),
                 GetValidCategoryDescription(),
-                getRandomBoolen()
+                GetRandomBoolen()
                 );
 
         public CreateCategoryInput GetInvalidInputShortName()
@@ -100,11 +70,5 @@ namespace CodeFlix.Catalog.UnitTest.Application.CreateCategory
             invalidInputTooLongDescription.Description = TooLongDescriptionForCategory;
             return invalidInputTooLongDescription;
         }
-
-        public Mock<ICategoryRepository> GetRepositoryMock()
-            => new();
-
-        public Mock<IUnitOfWork> GetUnitOfWork()
-            => new();
     }
 }

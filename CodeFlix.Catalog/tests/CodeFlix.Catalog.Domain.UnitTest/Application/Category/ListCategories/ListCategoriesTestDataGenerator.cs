@@ -1,6 +1,6 @@
 ﻿using CodeFlix.Catalog.Application.UseCases.Category.ListCategories;
 
-namespace CodeFlix.Catalog.UnitTest.Application.ListCategories
+namespace CodeFlix.Catalog.UnitTest.Application.Category.ListCategories
 {
     public class ListCategoriesTestDataGenerator
     {
@@ -16,43 +16,43 @@ namespace CodeFlix.Catalog.UnitTest.Application.ListCategories
                 {
                     case 0:
                         yield return new object[] {
-                            new ListCategoriesInput() 
+                            new ListCategoriesInput()
                         };
                         break;
                     case 1:
-                        yield return new object[] { 
-                            new ListCategoriesInput(inputExample.Page) 
+                        yield return new object[] {
+                            new ListCategoriesInput(inputExample.Page)
                         };
                         break;
                     case 2:
-                        yield return new object[] { 
+                        yield return new object[] {
                             new ListCategoriesInput(
-                                inputExample.Page, 
+                                inputExample.Page,
                                 inputExample.PerPage
                             )
                         };
                         break;
                     case 3:
-                        yield return new object[] { 
+                        yield return new object[] {
                             new ListCategoriesInput(
-                                inputExample.Page, 
-                                inputExample.PerPage, 
+                                inputExample.Page,
+                                inputExample.PerPage,
                                 inputExample.Search
-                            ) 
+                            )
                         };
                         break;
                     case 4:
-                        yield return new object[] { 
+                        yield return new object[] {
                             new ListCategoriesInput(
-                                inputExample.Page, 
-                                inputExample.PerPage, 
-                                inputExample.Search, 
+                                inputExample.Page,
+                                inputExample.PerPage,
+                                inputExample.Search,
                                 inputExample.Sort
-                            ) 
+                            )
                         };
                         break;
                     case 5:
-                        yield return new object[] { 
+                        yield return new object[] {
                             inputExample
                         };
                         break;

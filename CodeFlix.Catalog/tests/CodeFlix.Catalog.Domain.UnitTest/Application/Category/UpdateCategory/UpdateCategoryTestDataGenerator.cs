@@ -1,4 +1,4 @@
-﻿namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
+﻿namespace CodeFlix.Catalog.UnitTest.Application.Category.UpdateCategory
 {
     public class UpdateCategoryTestDataGenerator
     {
@@ -7,8 +7,8 @@
             var fixture = new UpdateCategoryTestFixture();
             for (int indice = 0; indice < times; indice++)
             {
-                var exampleCategory = fixture.GetValidCategory();
-                yield return new object[] { 
+                var exampleCategory = fixture.GetExampleCategory();
+                yield return new object[] {
                     fixture.GetInput(exampleCategory.Id),
                     exampleCategory
                 };
@@ -23,7 +23,7 @@
 
             for (int index = 0; index < times; index++)
             {
-                var exampleCategory = fixture.GetValidCategory();
+                var exampleCategory = fixture.GetExampleCategory();
 
                 switch (index % totalInvalidCases)
                 {

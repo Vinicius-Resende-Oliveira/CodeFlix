@@ -4,14 +4,14 @@ using Xunit;
 using UseCases = CodeFlix.Catalog.Application.UseCases.Category.GetCategory;
 using CodeFlix.Catalog.Application.Exceptions;
 
-namespace CodeFlix.Catalog.UnitTest.Application.GetCategory
+namespace CodeFlix.Catalog.UnitTest.Application.Category.GetCategory
 {
     [Collection(nameof(GetCategoryTestFixture))]
     public class GetCategoryTest
     {
         private readonly GetCategoryTestFixture _fixture;
 
-        public GetCategoryTest(GetCategoryTestFixture fixture) 
+        public GetCategoryTest(GetCategoryTestFixture fixture)
             => _fixture = fixture;
 
         [Fact(DisplayName = "GetCategory")]
@@ -19,10 +19,10 @@ namespace CodeFlix.Catalog.UnitTest.Application.GetCategory
         public async Task GetCategory()
         {
             var repositoryMock = _fixture.GetRepositoryMock();
-            var exampleCategory = _fixture.GetValidCategory();
-            repositoryMock.Setup(x => 
+            var exampleCategory = _fixture.GetExampleCategory();
+            repositoryMock.Setup(x =>
                 x.Get(
-                    It.IsAny<Guid>(), 
+                    It.IsAny<Guid>(),
                     It.IsAny<CancellationToken>()
                 )).ReturnsAsync(exampleCategory);
 
@@ -60,7 +60,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.GetCategory
 
             var input = new UseCases.GetCategoryInput(exampleGuid);
             var useCase = new UseCases.GetCategory(repositoryMock.Object);
-            var task = async () 
+            var task = async ()
                 => await useCase.Handle(input, CancellationToken.None);
 
             await task.Should().ThrowAsync<NotFoundException>();

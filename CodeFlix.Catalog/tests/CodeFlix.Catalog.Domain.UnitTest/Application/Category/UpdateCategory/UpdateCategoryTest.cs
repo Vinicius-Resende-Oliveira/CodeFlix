@@ -1,13 +1,13 @@
 ﻿using CodeFlix.Catalog.Application.Exceptions;
 using CodeFlix.Catalog.Application.UseCases.Category.UpdateCategory;
-using CodeFlix.Catalog.Domain.Entity;
+using Entity = CodeFlix.Catalog.Domain.Entity;
 using CodeFlix.Catalog.Domain.Exceptions;
 using FluentAssertions;
 using Moq;
 using Xunit;
 using UseCases = CodeFlix.Catalog.Application.UseCases.Category.UpdateCategory;
 
-namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
+namespace CodeFlix.Catalog.UnitTest.Application.Category.UpdateCategory
 {
     [Collection(nameof(UpdateCategoryTestFixture))]
     public class UpdateCategoryTest
@@ -26,7 +26,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
         )]
         public async Task UpdateCategory(
             UpdateCategoryInput input,
-            Category exampleCategory
+            Entity.Category exampleCategory
         )
         {
             var repositoryMock = _fixture.GetRepositoryMock();
@@ -42,7 +42,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
                 repositoryMock.Object,
                 unitOfWorkMock.Object
             );
-            
+
             var output = await useCase.Handle(input, CancellationToken.None);
 
             repositoryMock.Verify(
@@ -55,7 +55,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
 
             repositoryMock.Verify(
                 r => r.Update(
-                    It.IsAny<Category>(),
+                    It.IsAny<Entity.Category>(),
                     It.IsAny<CancellationToken>()
                 ),
                 Times.Once
@@ -71,7 +71,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
             output.Description.Should().Be(input.Description);
             output.IsActive.Should().Be((bool)input.IsActive!);
             output.Id.Should().Be(input.Id);
-            output.CreateAt.Should().NotBeSameDateAs(default(DateTime));
+            output.CreateAt.Should().NotBeSameDateAs(default);
         }
 
         [Theory(DisplayName = nameof(UpdateCategoryWithoutProvidingIsActive))]
@@ -83,7 +83,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
         )]
         public async Task UpdateCategoryWithoutProvidingIsActive(
             UpdateCategoryInput exampleInput,
-            Category exampleCategory
+            Entity.Category exampleCategory
         )
         {
             var repositoryMock = _fixture.GetRepositoryMock();
@@ -116,7 +116,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
 
             repositoryMock.Verify(
                 r => r.Update(
-                    It.IsAny<Category>(),
+                    It.IsAny<Entity.Category>(),
                     It.IsAny<CancellationToken>()
                 ),
                 Times.Once
@@ -132,7 +132,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
             output.Description.Should().Be(input.Description);
             output.IsActive.Should().Be(exampleCategory.IsActive);
             output.Id.Should().Be(input.Id);
-            output.CreateAt.Should().NotBeSameDateAs(default(DateTime));
+            output.CreateAt.Should().NotBeSameDateAs(default);
         }
 
         [Theory(DisplayName = nameof(UpdateCategoryWithoutProvidingDescription))]
@@ -144,7 +144,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
         )]
         public async Task UpdateCategoryWithoutProvidingDescription(
             UpdateCategoryInput exampleInput,
-            Category exampleCategory
+            Entity.Category exampleCategory
         )
         {
             var repositoryMock = _fixture.GetRepositoryMock();
@@ -152,7 +152,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
             var input = new UpdateCategoryInput(
                   exampleInput.Id,
                   exampleInput.Name,
-                  null, 
+                  null,
                   exampleInput.IsActive);
 
             repositoryMock.Setup(x =>
@@ -178,7 +178,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
 
             repositoryMock.Verify(
                 r => r.Update(
-                    It.IsAny<Category>(),
+                    It.IsAny<Entity.Category>(),
                     It.IsAny<CancellationToken>()
                 ),
                 Times.Once
@@ -194,7 +194,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
             output.Description.Should().Be(exampleCategory.Description);
             output.IsActive.Should().Be((bool)input.IsActive!);
             output.Id.Should().Be(input.Id);
-            output.CreateAt.Should().NotBeSameDateAs(default(DateTime));
+            output.CreateAt.Should().NotBeSameDateAs(default);
         }
 
         [Theory(DisplayName = nameof(UpdateCategoryWithOnlyName))]
@@ -206,7 +206,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
         )]
         public async Task UpdateCategoryWithOnlyName(
             UpdateCategoryInput exampleInput,
-            Category exampleCategory
+            Entity.Category exampleCategory
         )
         {
             var repositoryMock = _fixture.GetRepositoryMock();
@@ -238,7 +238,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
 
             repositoryMock.Verify(
                 r => r.Update(
-                    It.IsAny<Category>(),
+                    It.IsAny<Entity.Category>(),
                     It.IsAny<CancellationToken>()
                 ),
                 Times.Once
@@ -254,7 +254,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
             output.Description.Should().Be(exampleCategory.Description);
             output.IsActive.Should().Be(exampleCategory.IsActive);
             output.Id.Should().Be(input.Id);
-            output.CreateAt.Should().NotBeSameDateAs(default(DateTime));
+            output.CreateAt.Should().NotBeSameDateAs(default);
         }
 
         [Fact(DisplayName = "NotFoundExceptionWhenCategoryDoesntExist")]
@@ -299,7 +299,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.UpdateCategory
         )]
         public async void ThrowWhenCantUpdateAggregate(
             UpdateCategoryInput input,
-            Category exampleCategory,
+            Entity.Category exampleCategory,
             string exceptionMessage
         )
         {

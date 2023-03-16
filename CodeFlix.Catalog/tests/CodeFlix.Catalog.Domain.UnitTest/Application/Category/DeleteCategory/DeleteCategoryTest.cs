@@ -1,11 +1,11 @@
 ﻿using CodeFlix.Catalog.Application.Exceptions;
-using CodeFlix.Catalog.Domain.Entity;
+using Entity = CodeFlix.Catalog.Domain.Entity;
 using FluentAssertions;
 using Moq;
 using Xunit;
 using UseCases = CodeFlix.Catalog.Application.UseCases.Category.DeleteCategory;
 
-namespace CodeFlix.Catalog.UnitTest.Application.DeleteCategory
+namespace CodeFlix.Catalog.UnitTest.Application.Category.DeleteCategory
 {
     [Collection(nameof(DeleteCategoryTestFixture))]
     public class DeleteCategoryTest
@@ -14,7 +14,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.DeleteCategory
 
         public DeleteCategoryTest(DeleteCategoryTestFixture fixture)
             => _fixture = fixture;
-        
+
 
         [Fact(DisplayName = "DeleteCategory")]
         [Trait("Application", "DeleteCategory - Use Cases")]
@@ -22,7 +22,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.DeleteCategory
         {
             var repositoryMock = _fixture.GetRepositoryMock();
             var unitOfWorkMock = _fixture.GetUnitOfWork();
-            var exampleCategory = _fixture.GetValidCategory();
+            var exampleCategory = _fixture.GetExampleCategory();
 
             repositoryMock.Setup(x => x.Get(
                 It.IsAny<Guid>(),
@@ -30,7 +30,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.DeleteCategory
             ).ReturnsAsync(exampleCategory);
 
             repositoryMock.Setup(x => x.Delete(
-                It.IsAny<Category>(), 
+                It.IsAny<Entity.Category>(),
                 It.IsAny<CancellationToken>()
             ));
 
@@ -38,13 +38,13 @@ namespace CodeFlix.Catalog.UnitTest.Application.DeleteCategory
             var useCase = new UseCases.DeleteCategory(repositoryMock.Object, unitOfWorkMock.Object);
 
             await useCase.Handle(input, CancellationToken.None);
-            
+
             repositoryMock.Verify(x => x.Get(
-                exampleCategory.Id, 
+                exampleCategory.Id,
                 CancellationToken.None
             ), Times.Once);
             repositoryMock.Verify(x => x.Delete(
-                exampleCategory, 
+                exampleCategory,
                 CancellationToken.None
             ), Times.Once);
             unitOfWorkMock.Verify(x => x.Commit(
@@ -80,7 +80,7 @@ namespace CodeFlix.Catalog.UnitTest.Application.DeleteCategory
                 CancellationToken.None
             ), Times.Once);
             repositoryMock.Verify(x => x.Delete(
-                It.IsAny<Category>(),
+                It.IsAny<Entity.Category>(),
                 CancellationToken.None
             ), Times.Never);
             unitOfWorkMock.Verify(x => x.Commit(
